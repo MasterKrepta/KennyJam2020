@@ -10,21 +10,32 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
     Animator anim;
     Vector3 movement;
+    public bool _isGrounded = true;
+    public LayerMask Ground;
+    [SerializeField] Transform groundCheck;
+    public float groundDistance = 0.02f;
+    float h, v;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
+        groundDistance = GetComponentInChildren<Collider>().bounds.extents.y;
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        var h = Input.GetAxis("Horizontal");
-        var v = Input.GetAxis("Vertical");
+        h = Input.GetAxis("Horizontal");
+        v = Input.GetAxis("Vertical");
 
         movement = new Vector3(h, 0, v);
-
+        ManageJump();
+    }
+    void FixedUpdate()
+    {
+        _isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
         HandleRotation();
 
         rb.velocity = new Vector3(h * moveSpeed, rb.velocity.y, v * moveSpeed);
@@ -32,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
         anim.SetBool("Moving", SetMovementAnim());
 
-        ManageJump();
+        
     }
 
     private void HandleRotation()
@@ -49,9 +60,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void ManageJump()
     {
-        if (Input.GetButtonDown("Jump"))
+        
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
-            rb.velocity += new Vector3(rb.velocity.x, JumpForce, rb.velocity.z);
+            //rb.velocity += new Vector3(rb.velocity.x, JumpForce, rb.velocity.z) * Time.deltaTime;
+            rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             anim.SetTrigger("Jump");
         }
     }
@@ -69,4 +82,5 @@ public class PlayerMovement : MonoBehaviour
         }
         
     }
+
 }
