@@ -18,6 +18,4 @@ public class Pickup : MonoBehaviour
             _combat.PickupItem(this.transform);
         }
     }
-
-
 }
