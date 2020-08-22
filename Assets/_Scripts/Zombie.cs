@@ -1,17 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Zombie : MonoBehaviour
 {
     [SerializeField] GameObject parent;
-    public Rigidbody[] bodies;
-    public SphereCollider[] sphereColliders;
+    [SerializeField] Transform player;
+    Animator anim;
+    
+    Rigidbody[] bodies;
+    public float stunTime = 5f;
+    NavMeshAgent agent;
+    bool stunned = false;
+
+    
     // Start is called before the first frame update
     void Start()
     {
         bodies = parent.GetComponentsInChildren<Rigidbody>();
-        sphereColliders = parent.GetComponentsInChildren<SphereCollider>();
+        anim = GetComponentInChildren<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
 
         foreach (var rb in bodies)
         {
@@ -19,14 +31,39 @@ public class Zombie : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (!stunned)
+        {
+            agent.SetDestination(player.position);
+        }
+        
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Pickup"))
+        if (other.CompareTag("Pickup")) //! this allows them to trip over pumpkins
         {
-              foreach (var rb in bodies)
+            stunned = true;
+            anim.enabled = false;
+            other.GetComponent<Pickup>().Respawn();
+            foreach (var rb in bodies)
             {
                 rb.isKinematic = false;
+                StartCoroutine(Stun());
             }
         }
+    }
+
+    IEnumerator Stun()
+    {
+        yield return new WaitForSeconds(stunTime);
+        anim.enabled = true;
+        foreach (var rb in bodies)
+        {
+            rb.isKinematic = false;
+            
+        }
+        stunned = false;
     }
 }

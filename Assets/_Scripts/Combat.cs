@@ -46,6 +46,7 @@ public class Combat : MonoBehaviour
     private void ThrowItem(Transform itemInHand)
     {
         itemInHand.parent = null;
+        
         Rigidbody rb = itemInHand.transform.GetComponent<Rigidbody>();
         hasItem = false;
         handsCol.enabled = false;
@@ -53,12 +54,14 @@ public class Combat : MonoBehaviour
         rb.AddForce(hands.forward * throwForce, ForceMode.Impulse);
         itemInHand.transform.GetComponent<Collider>().enabled = true;
         itemInHand.transform.localScale = Vector3.one;
+        StartCoroutine(ChangeTag());
         
     }
 
     public void PickupItem(Transform item)
     {
         Debug.Log(item.name);
+        item.tag = "Pickup";
         hasItem = true;
         item.transform.GetComponent<Rigidbody>().isKinematic = true;
         item.transform.GetComponent<Collider>().enabled = false;
@@ -78,4 +81,10 @@ public class Combat : MonoBehaviour
         }
         
     }
+    IEnumerator ChangeTag()
+    {
+        yield return new WaitForSeconds(.25f);
+        itemInHand.tag = "Untagged";
+    }
+        
 }
