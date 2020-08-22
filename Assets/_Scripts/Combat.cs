@@ -14,10 +14,13 @@ public class Combat : MonoBehaviour
     public float pickupAngle = 10;
     public float throwAngle = -30f;
 
+    Collider handsCol;
     // Start is called before the first frame update
     void Start()
     {
-        hands.rotation = Quaternion.Euler(pickupAngle, 0, 0);
+        //hands.rotation = Quaternion.Euler(pickupAngle, 0, 0);
+        handsCol = hands.GetComponent<Collider>();
+        handsCol.enabled = false;
     }
 
     // Update is called once per frame
@@ -27,12 +30,14 @@ public class Combat : MonoBehaviour
         {
             if (hasItem == false)
             {
-                hands.rotation = Quaternion.Euler(pickupAngle, 0, 0);
-                PickupItem();
+                handsCol.enabled = true;
+                //hands.rotation = Quaternion.Euler(pickupAngle, 0, 0);
+                StartCoroutine(TogglePickup());
+                //PickupItem();
             }
             else
             {
-                hands.rotation = Quaternion.Euler(throwAngle, 0, 0);
+                //hands.rotation = Quaternion.Euler(throwAngle, 0, 0);
                 ThrowItem(itemInHand);
             }
         }
@@ -42,29 +47,35 @@ public class Combat : MonoBehaviour
     {
         itemInHand.parent = null;
         Rigidbody rb = itemInHand.transform.GetComponent<Rigidbody>();
+        hasItem = false;
+        handsCol.enabled = false;
         rb.isKinematic = false;
         rb.AddForce(hands.forward * throwForce, ForceMode.Impulse);
         itemInHand.transform.GetComponent<Collider>().enabled = true;
         itemInHand.transform.localScale = Vector3.one;
-        hasItem = false;
+        
     }
 
-    private void PickupItem()
+    public void PickupItem(Transform item)
     {
-        
-        RaycastHit hit;
-        
-        if (Physics.Raycast(hands.position, hands.TransformDirection(Vector3.forward), out hit, range))
-        {
-            Debug.Log(hit.collider.name);
-            hasItem = true;
-            hit.transform.GetComponent<Rigidbody>().isKinematic = true;
-            hit.transform.GetComponent<Collider>().enabled = false;
-            hit.transform.localScale = Vector3.one * scale;
-            hit.transform.parent = hands;
-            hit.transform.position = hands.position;
-            itemInHand = hit.transform;
+        Debug.Log(item.name);
+        hasItem = true;
+        item.transform.GetComponent<Rigidbody>().isKinematic = true;
+        item.transform.GetComponent<Collider>().enabled = false;
+        item.transform.localScale = Vector3.one * scale;
+        item.transform.parent = hands;
+        item.transform.position = hands.position;
+        itemInHand = item.transform;
+    }
 
+
+    IEnumerator TogglePickup()
+    {
+        yield return new WaitForSeconds(.25f);
+        if (hasItem == false)
+        {
+            handsCol.enabled = false;
         }
+        
     }
 }
