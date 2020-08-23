@@ -7,6 +7,15 @@ public class Alter : MonoBehaviour
 {
     public int items = 0;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            items++;
+            CheckVictory();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Collectable"))
@@ -25,7 +34,7 @@ public class Alter : MonoBehaviour
     {
         if (items == 3)
         {
-            Debug.Log("Game over");
+            GameObject.FindObjectOfType<AudioManager>().GameOver(); // this should always just work
         }
     }
 }
