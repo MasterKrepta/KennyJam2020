@@ -2243,7 +2243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a4946271f8fe8498435e82097e484b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  howtoScreen: {fileID: 0}
+  howtoScreen: {fileID: 1194314650}
 --- !u!1001 &2024369730
 PrefabInstance:
   m_ObjectHideFlags: 0
