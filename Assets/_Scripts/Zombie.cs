@@ -10,16 +10,19 @@ public class Zombie : MonoBehaviour
     [SerializeField] GameObject parent;
     [SerializeField] Transform player;
     Animator anim;
-    
+    AudioSource audio;
     Rigidbody[] bodies;
     public float stunTime = 5f;
     NavMeshAgent agent;
     bool stunned = false;
+    [SerializeField]GameObject attackPoint;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        
+        audio = GetComponent<AudioSource>();
         bodies = parent.GetComponentsInChildren<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();
@@ -44,7 +47,9 @@ public class Zombie : MonoBehaviour
     {
         if (other.CompareTag("Pickup")) 
         {
+            attackPoint.SetActive(false);
             stunned = true;
+            audio.Play();
             anim.enabled = false;
             other.GetComponent<Pickup>().Respawn();
             foreach (var rb in bodies)
@@ -65,5 +70,6 @@ public class Zombie : MonoBehaviour
             
         }
         stunned = false;
+        attackPoint.SetActive(true);
     }
 }

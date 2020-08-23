@@ -7,7 +7,7 @@ public class AttackPlayer : MonoBehaviour
     [SerializeField] Transform[] RespawnPoints;
     Transform closestRespawn;
     Transform player;
-    Vector3 zombieSpawnpoint;
+    public Vector3 zombieSpawnpoint;
 
     private void Start()
     {
@@ -27,6 +27,11 @@ public class AttackPlayer : MonoBehaviour
 
     private void RespawnPlayer()
     {
+
+        foreach (var z in GameObject.FindObjectsOfType<AttackPlayer>())
+        {
+            z.transform.parent.position = z.zombieSpawnpoint;
+        }
         closestRespawn = RespawnPoints[0];
         var shortest = Vector3.Distance(player.position, closestRespawn.position);
         foreach (var t in RespawnPoints)

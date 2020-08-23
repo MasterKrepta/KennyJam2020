@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
+    public GameObject howtoScreen;
     private static AudioManager instance = null;
     public static AudioManager Instance
     {
@@ -13,6 +14,7 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
+        
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
@@ -36,7 +38,7 @@ public class AudioManager : MonoBehaviour
     }
     public void LoadHowTo()
     {
-        
+        howtoScreen.SetActive(true);
     }
 
     public void QuitGame()

@@ -8,6 +8,7 @@ public class Combat : MonoBehaviour
     [SerializeField] Transform hands;
     bool hasItem = false;
     Transform itemInHand;
+    AudioSource audio;
     public float range = 1f;
     public float scale = 0.5f;
     public float throwForce = 5f;
@@ -18,6 +19,7 @@ public class Combat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audio = GetComponent<AudioSource>();
         //hands.rotation = Quaternion.Euler(pickupAngle, 0, 0);
         handsCol = hands.GetComponent<Collider>();
         handsCol.enabled = false;
@@ -45,6 +47,7 @@ public class Combat : MonoBehaviour
 
     private void ThrowItem(Transform itemInHand)
     {
+        audio.Play();
         itemInHand.parent = null;
         
         Rigidbody rb = itemInHand.transform.GetComponent<Rigidbody>();
@@ -60,7 +63,7 @@ public class Combat : MonoBehaviour
 
     public void PickupItem(Transform item)
     {
-        Debug.Log(item.name);
+        //Debug.Log(item.name);
         item.tag = "Pickup";
         hasItem = true;
         item.transform.GetComponent<Rigidbody>().isKinematic = true;

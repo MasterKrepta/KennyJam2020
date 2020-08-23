@@ -6,6 +6,7 @@ public class Pickup : MonoBehaviour
 {
     Combat _combat;
     Vector3 startingPoint;
+    
     // Start is called before the first frame update
     void Start()
     {

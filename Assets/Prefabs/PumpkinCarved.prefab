@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9076474532889990271}
   - component: {fileID: 9076474532889990269}
   m_Layer: 0
-  m_Name: Pumpkin
+  m_Name: PumpkinCarved
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
