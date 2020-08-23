@@ -42,7 +42,7 @@ public class Zombie : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Pickup")) //! this allows them to trip over pumpkins
+        if (other.CompareTag("Pickup")) 
         {
             stunned = true;
             anim.enabled = false;
