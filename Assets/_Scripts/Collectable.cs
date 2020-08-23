@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Collectable : MonoBehaviour
 {
     public Vector3 dropPoint;
+    public RawImage image;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,8 @@ public class Collectable : MonoBehaviour
             this.transform.position = other.transform.position;
             
             this.GetComponent<Rigidbody>().isKinematic = true;
+            var particle = this.transform.GetChild(0);
+            particle.gameObject.SetActive(false);
         }
     }
 
@@ -37,5 +41,6 @@ public class Collectable : MonoBehaviour
     {
         print(this.name);
         transform.position = dropPoint;
+        Destroy(image.gameObject);
     }
 }
